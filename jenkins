@@ -1,1 +1,35 @@
 
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull Code') {
+            steps {
+                echo 'Pulling code from GitHub...'
+                git branch: 'main', url: 'https://github.com/Ress-0722/Node.js.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                sh 'docker build -t reshika11/dockerfile:latest .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                echo 'Pushing Docker image to DockerHub...'
+                sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                sh 'docker push reshika11/dockerfile:latest'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                // Deployment steps here (optional)
+            }
+        }
+    }
+}
