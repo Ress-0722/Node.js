@@ -1,0 +1,12 @@
+stage('Deploy') {
+    when {
+        expression { return params.DEPLOY_APP }
+    }
+    steps {
+        // For Kubernetes
+        sh "kubectl apply -f kubernetes/deployment.yaml"
+        
+        // OR for docker-compose
+        sh "docker-compose -f docker-compose.yml up -d"
+    }
+}
